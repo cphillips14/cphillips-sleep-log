@@ -178,6 +178,13 @@ header {
   margin-right: 0.35rem;
 }
 
+.byline {
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
 /* ---- BUTTONS ---- */
 .btn {
   display: inline-flex;
