@@ -1,38 +1,58 @@
 # RestLog — Sleep Better, Understand Your Energy
 
-A simple, calming sleep tracker designed for busy college students who want to understand their sleep patterns and improve their energy and focus.
+A frontend-only sleep tracking web app for college students. Uses localStorage for data persistence — no backend or database required.
 
-## Project Structure
+## File Structure
 
-- `index.html` — Single-page app shell with all views (landing, log form, dashboard, history, edit modal)
-- `style.css` — Calming soft-indigo/lavender design, mobile-first, WCAG 2.1 AA compliant
-- `app.js` — All client-side logic: view routing, localStorage CRUD, form handling, dashboard calculations, insights engine
+```
+restlog/
+├── index.html              # Main app — all views in one file
+├── style.css               # All styles — calming indigo/lavender palette
+├── app.js                  # All logic — routing, storage, form, insights
+├── staticwebapp.config.json # Azure Static Web App routing config
+└── replit.md
+```
 
-## Features
+## Architecture
 
-- **Landing page** — Headline, value description, feature chips, CTA
-- **Sleep Log Form** — Date, bedtime, wake time (auto-calculates hours), 1–5 star quality rating, optional notes
-- **Dashboard** — Average hours, average quality, total entries, dynamic pattern insights
-- **Sleep History** — All entries with edit and delete support
-- **Edit Modal** — Inline editing of any past entry
+- Single-page app using vanilla HTML5, CSS3, and JavaScript
+- View switching handled by toggling `.active` class and `hidden` attribute
+- All data stored in `localStorage` under key `restlog_entries`
+- No build step, no frameworks, no dependencies
 
-## Data Storage
+## Semantic HTML Structure
 
-Uses **localStorage** — no backend or database needed. Appropriate for a prototype; easy to migrate to a database later if multi-device sync is needed.
+```
+<header>
+  <nav> ... </nav>
+</header>
+<main>
+  <section id="view-landing">  Landing page     </section>
+  <section id="view-log">      Sleep log form   </section>
+  <section id="view-dashboard"> Dashboard       </section>
+  <section id="view-history">  Sleep history    </section>
+</main>
+<div role="dialog">  Edit modal  </div>
+<div role="status">  Toast       </div>
+```
 
-## Tech Stack
+## Accessibility (WCAG 2.1 AA)
 
-- Pure HTML5, CSS3, vanilla JavaScript
-- No frameworks, no build step
-- Ready for Azure Static Web App deployment (publicDir: ".")
+- All form inputs have associated `<label>` elements
+- Star widget uses `role="radiogroup"` with individual `aria-label` per star
+- Color contrast: primary text (#2e2b3d) on background (#f4f2f8) — ~13:1; muted text (#6b6680) — ~4.5:1
+- Focus indicators: visible 2px primary-color outline on all interactive elements
+- `aria-live` regions for dynamic content (hours display, toast)
+- `aria-current="page"` on active nav item
+- Escape key closes modal; backdrop click closes modal
 
 ## Running Locally
 
-Workflow "Start application" runs:
+Workflow "Start application":
 ```
 python3 -m http.server 5000 --bind 0.0.0.0
 ```
 
-## Deployment
+## Azure Static Web App Deployment
 
-Configured as a **static** deployment with `publicDir: "."`.
+Configured as a **static** deployment. `staticwebapp.config.json` handles SPA routing fallback.
