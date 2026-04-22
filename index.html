@@ -1,1 +1,219 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="RestLog — a simple sleep tracker that helps college students understand their sleep patterns, energy, and focus." />
+  <title>RestLog — Sleep Better, Understand Your Energy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <span class="nav-brand" data-view="landing" role="link" tabindex="0" aria-label="RestLog home">🌙 RestLog</span>
+    <ul class="nav-links" role="list">
+      <li><button data-view="log" aria-label="Log sleep">Log</button></li>
+      <li><button data-view="dashboard" aria-label="Dashboard">Dashboard</button></li>
+      <li><button data-view="history" aria-label="History">History</button></li>
+    </ul>
+  </nav>
+
+  <!-- LANDING VIEW -->
+  <main id="view-landing" class="view" role="main">
+    <section class="landing" aria-labelledby="landing-headline">
+      <div class="landing-moon" aria-hidden="true">🌙</div>
+      <h1 id="landing-headline">Sleep better,<br /><span>understand your energy</span></h1>
+      <p>
+        Most apps just count hours. RestLog helps you connect your sleep to how you actually feel —
+        so you can spot patterns, make sense of tired days, and take back control of your energy.
+      </p>
+      <div class="landing-features" role="list" aria-label="Key features">
+        <div class="feature-chip" role="listitem"><span aria-hidden="true">⚡</span>Log in under 10 seconds</div>
+        <div class="feature-chip" role="listitem"><span aria-hidden="true">📊</span>Spot your patterns</div>
+        <div class="feature-chip" role="listitem"><span aria-hidden="true">📱</span>Mobile-friendly</div>
+      </div>
+      <button class="btn btn-primary btn-lg" data-view="log" aria-label="Start logging your sleep">
+        Start Logging Sleep
+      </button>
+    </section>
+  </main>
+
+  <!-- LOG FORM VIEW -->
+  <section id="view-log" class="view" aria-labelledby="log-title">
+    <div class="container">
+      <h1 class="page-title" id="log-title">Log Sleep</h1>
+      <p class="page-subtitle">Takes under 10 seconds. Fill in what you know.</p>
+      <div class="card">
+        <form id="log-form" novalidate>
+
+          <div class="form-group">
+            <label for="log-date">Date</label>
+            <input type="date" id="log-date" name="date" required aria-required="true" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="log-bedtime">Bedtime</label>
+              <input type="time" id="log-bedtime" name="bedtime" required aria-required="true" />
+            </div>
+            <div class="form-group">
+              <label for="log-waketime">Wake time</label>
+              <input type="time" id="log-waketime" name="waketime" required aria-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Total sleep <span class="hint">(auto-calculated)</span></label>
+            <div class="sleep-hours-display" id="log-hours-display" aria-live="polite" aria-atomic="true">—</div>
+          </div>
+
+          <div class="form-group">
+            <label id="quality-label">Sleep quality</label>
+            <div class="stars-widget" id="log-stars" role="radiogroup" aria-labelledby="quality-label">
+              <span class="star" role="radio" aria-checked="false" tabindex="0" title="1 — Poor">★</span>
+              <span class="star" role="radio" aria-checked="false" tabindex="0" title="2 — Fair">★</span>
+              <span class="star" role="radio" aria-checked="false" tabindex="0" title="3 — OK">★</span>
+              <span class="star" role="radio" aria-checked="false" tabindex="0" title="4 — Good">★</span>
+              <span class="star" role="radio" aria-checked="false" tabindex="0" title="5 — Great">★</span>
+            </div>
+            <div class="quality-labels" aria-hidden="true">
+              <span>Poor</span><span>Great</span>
+            </div>
+            <input type="hidden" id="log-quality" name="quality" value="" />
+          </div>
+
+          <div class="form-group">
+            <label for="log-notes">Notes <span class="hint">(optional)</span></label>
+            <textarea id="log-notes" name="notes" placeholder="Anything affecting your sleep? Stress, caffeine, late screen time…" aria-label="Optional notes about your sleep"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Entry</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <section id="view-dashboard" class="view" aria-labelledby="dashboard-title">
+    <div class="container">
+      <h1 class="page-title" id="dashboard-title">Dashboard</h1>
+      <p class="page-subtitle">Your sleep at a glance.</p>
+
+      <!-- Empty state -->
+      <div id="dashboard-empty" class="empty-state" style="display:none;" role="status">
+        <div class="empty-icon" aria-hidden="true">🌙</div>
+        <p>No sleep entries yet. Log your first night to see your dashboard.</p>
+        <button class="btn btn-primary" data-view="log">Log Sleep Now</button>
+      </div>
+
+      <!-- Dashboard content -->
+      <div id="dashboard-content" style="display:none;">
+        <div class="stats-grid" role="list" aria-label="Sleep statistics">
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" aria-hidden="true">⏱️</div>
+            <div class="stat-value" id="stat-avg-hours">—</div>
+            <div class="stat-label">Avg hours/night</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" aria-hidden="true">⭐</div>
+            <div class="stat-value" id="stat-avg-quality">—</div>
+            <div class="stat-label">Avg quality (1–5)</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon" aria-hidden="true">📋</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Total entries</div>
+          </div>
+        </div>
+
+        <div class="insights-section">
+          <h2 class="section-heading"><span aria-hidden="true">💡</span> Insights</h2>
+          <div id="insights-list" role="list" aria-label="Sleep insights"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HISTORY VIEW -->
+  <section id="view-history" class="view" aria-labelledby="history-title">
+    <div class="container">
+      <h1 class="page-title" id="history-title">Sleep History</h1>
+      <p class="page-subtitle">All your logged nights.</p>
+
+      <div id="history-empty" class="empty-state" style="display:none;" role="status">
+        <div class="empty-icon" aria-hidden="true">📋</div>
+        <p>No entries yet. Start logging to build your history.</p>
+        <button class="btn btn-primary" data-view="log">Log Sleep Now</button>
+      </div>
+
+      <div id="history-list" role="list" aria-label="Sleep history entries"></div>
+    </div>
+  </section>
+
+  <!-- EDIT MODAL -->
+  <div id="modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <h2 class="modal-title" id="modal-title">Edit Entry</h2>
+      <form id="edit-form" novalidate>
+
+        <div class="form-group">
+          <label for="edit-date">Date</label>
+          <input type="date" id="edit-date" name="date" required aria-required="true" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-bedtime">Bedtime</label>
+            <input type="time" id="edit-bedtime" name="bedtime" required aria-required="true" />
+          </div>
+          <div class="form-group">
+            <label for="edit-waketime">Wake time</label>
+            <input type="time" id="edit-waketime" name="waketime" required aria-required="true" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Total sleep <span class="hint">(auto-calculated)</span></label>
+          <div class="sleep-hours-display" id="edit-hours-display" aria-live="polite">—</div>
+        </div>
+
+        <div class="form-group">
+          <label id="edit-quality-label">Sleep quality</label>
+          <div class="stars-widget" id="edit-stars" role="radiogroup" aria-labelledby="edit-quality-label">
+            <span class="star" role="radio" aria-checked="false" tabindex="0" title="1 — Poor">★</span>
+            <span class="star" role="radio" aria-checked="false" tabindex="0" title="2 — Fair">★</span>
+            <span class="star" role="radio" aria-checked="false" tabindex="0" title="3 — OK">★</span>
+            <span class="star" role="radio" aria-checked="false" tabindex="0" title="4 — Good">★</span>
+            <span class="star" role="radio" aria-checked="false" tabindex="0" title="5 — Great">★</span>
+          </div>
+          <div class="quality-labels" aria-hidden="true">
+            <span>Poor</span><span>Great</span>
+          </div>
+          <input type="hidden" id="edit-quality" name="quality" value="" />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-notes">Notes <span class="hint">(optional)</span></label>
+          <textarea id="edit-notes" name="notes" placeholder="Anything affecting your sleep?"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="edit-cancel" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
